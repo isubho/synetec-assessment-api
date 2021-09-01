@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -5,7 +6,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using SynetecAssessmentApi.Domain.Mapping;
+using SynetecAssessmentApi.Interfaces;
 using SynetecAssessmentApi.Persistence;
+using SynetecAssessmentApi.Persistence.Interfaces;
+using SynetecAssessmentApi.Persistence.Repositories;
+using SynetecAssessmentApi.Services;
+using System;
 
 namespace SynetecAssessmentApi
 {
@@ -21,6 +28,18 @@ namespace SynetecAssessmentApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IEmployeeService, EmployeeService>();
+            services.AddScoped<IBonusPoolService, BonusPoolService>();
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+            IMapper mapper = mapperConfig.CreateMapper();
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

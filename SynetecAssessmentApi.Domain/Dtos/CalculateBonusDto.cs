@@ -1,4 +1,4 @@
-﻿namespace SynetecAssessmentApi.Dtos
+﻿namespace SynetecAssessmentApi.Domain.Dtos
 {
     public class CalculateBonusDto
     {
